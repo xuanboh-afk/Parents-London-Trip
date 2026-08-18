@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casa Xuan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone:#F2EBDC;      /* Portland stone */
+    --stone-2:#E5DAC5;
+    --oxblood:#8C3A34;    /* Underground tile */
+    --oxblood-d:#6E2B26;
+    --navy:#22394F;       /* enamel sign blue */
+    --jade:#2E7167;       /* Peranakan green */
+    --mustard:#D3A23E;
+    --rose:#C98A85;
+    --charcoal:#221D19;
+    --ink:#2C2620;
+    --ink-2:#6E6357;
+    --line:#DCD0BB;
+    --hinoki:#E2CFA9;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--stone);
+    color:var(--ink);
+    font-family:'Karla',-apple-system,BlinkMacSystemFont,sans-serif;
+    font-size:17px;
+    line-height:1.7;
+  }
+
+  /* ---------- Peranakan tile band ---------- */
+  .tiles{
+    height:34px;
+    background-color:var(--stone);
+    background-image:
+      radial-gradient(circle at 50% 50%, var(--mustard) 3.5px, transparent 4.5px),
+      radial-gradient(circle at 50% 50%, transparent 8px, var(--jade) 8px 9.5px, transparent 10px),
+      radial-gradient(circle at 0% 0%, var(--oxblood) 5px, transparent 6px),
+      radial-gradient(circle at 100% 0%, var(--oxblood) 5px, transparent 6px),
+      radial-gradient(circle at 0% 100%, var(--oxblood) 5px, transparent 6px),
+      radial-gradient(circle at 100% 100%, var(--oxblood) 5px, transparent 6px);
+    background-size:34px 34px;
+  }
+
+  /* ---------- sliding hinoki doors ---------- */
+  body.shut{overflow:hidden}
+  .cover{
+    position:fixed;inset:0;z-index:50;
+    display:block;width:100%;margin:0;padding:0;border:0;
+    background:radial-gradient(60% 50% at 50% 48%,#F7EEDC,#E3D6BE);
+    cursor:pointer;
+  }
+  .cover:focus-visible{outline:none}
+  .cover:focus-visible .lab{outline:2px solid var(--oxblood);outline-offset:8px}
+  .cover.open{opacity:0;transition:opacity .5s ease .8s;pointer-events:none}
+  .leaf{
+    position:absolute;top:0;bottom:0;
+    width:50.1%;
+    background:
+      repeating-linear-gradient(90deg,
+        rgba(255,255,255,.30) 0 1px,
+        transparent 1px 9px,
+        rgba(150,116,68,.13) 9px 10px,
+        transparent 10px 19px),
+      linear-gradient(180deg,#EBDCBC 0%,#E2CFA9 62%,#D6C098 100%);
+    transition:transform 1.35s cubic-bezier(.5,.02,.2,1);
+  }
+  .leaf.l{left:0;box-shadow:inset -2px 0 6px rgba(150,116,68,.20)}
+  .leaf.r{right:0;box-shadow:inset 2px 0 6px rgba(150,116,68,.20)}
+  .cover.open .leaf.l{transform:translateX(-101%)}
+  .cover.open .leaf.r{transform:translateX(101%)}
+  .leaf::before{
+    content:"";position:absolute;
+    inset:26px 22px;
+    border:2px solid rgba(150,116,68,.30);
+  }
+  .leaf::after{
+    content:"";position:absolute;
+    left:22px;right:22px;top:30%;
+    height:2px;background:rgba(150,116,68,.30);
+    box-shadow:0 34vh 0 rgba(150,116,68,.30);
+  }
+  .pull{
+    position:absolute;top:50%;
+    width:14px;height:66px;margin-top:-33px;
+    border-radius:8px;
+    background:linear-gradient(90deg,rgba(120,92,54,.30),rgba(120,92,54,.12));
+    box-shadow:inset 0 0 0 1px rgba(120,92,54,.35);
+  }
+  .leaf.l .pull{right:30px}
+  .leaf.r .pull{left:30px}
+  .mark,.lab{
+    position:absolute;left:0;right:0;text-align:center;z-index:3;
+    transition:opacity .4s ease;
+  }
+  .mark{
+    top:13vh;
+    font-family:'Archivo',sans-serif;
+    font-weight:700;font-size:16px;
+    letter-spacing:.4em;text-indent:.4em;
+    text-transform:uppercase;
+    color:var(--oxblood);
+  }
+  .lab{
+    bottom:13vh;
+    font-family:'Archivo',sans-serif;
+    font-size:10.5px;font-weight:600;
+    letter-spacing:.44em;text-indent:.44em;
+    text-transform:uppercase;
+    color:rgba(110,78,53,.75);
+  }
+  .lab::after{
+    content:"";display:block;width:30px;height:1px;
+    background:rgba(110,78,53,.45);margin:13px auto 0;
+  }
+  .cover.open .mark,.cover.open .lab{opacity:0}
+
+  /* ---------- header ---------- */
+  .hero{
+    position:relative;
+    text-align:center;
+    padding:56px 22px 44px;
+    background-color:var(--stone);
+    background-image:radial-gradient(circle at 50% 50%,
+      transparent 10px, rgba(140,58,52,.07) 10px 12px, transparent 12px);
+    background-size:46px 46px;
+  }
+  .roundel{
+    position:relative;
+    width:104px;height:104px;
+    margin:0 auto 34px;
+  }
+  .roundel .ring{
+    position:absolute;inset:0;
+    border:13px solid var(--oxblood);
+    border-radius:50%;
+  }
+  .roundel .bar{
+    position:absolute;
+    left:-34px;right:-34px;top:50%;
+    height:22px;margin-top:-11px;
+    background:var(--navy);
+  }
+  h1{
+    font-family:'Archivo',sans-serif;
+    font-weight:600;
+    font-size:clamp(29px,7.6vw,42px);
+    line-height:1.28;
+    letter-spacing:-.005em;
+    margin:0;
+    color:#191512;
+  }
+  .rules{
+    margin:26px auto 20px;
+    width:150px;
+    border-top:3px solid var(--oxblood);
+    border-bottom:1px solid var(--oxblood);
+    height:6px;
+  }
+  .over{
+    font-family:'Archivo',sans-serif;
+    font-size:11px;font-weight:600;
+    letter-spacing:.34em;text-indent:.34em;
+    text-transform:uppercase;
+    color:var(--ink-2);
+    margin:0;
+  }
+
+  /* ---------- cards ---------- */
+  .sheet{max-width:600px;margin:0 auto;padding:26px 18px 88px}
+
+  .card{
+    background:#FBF6EC;
+    border:1px solid var(--line);
+    border-top:5px solid var(--oxblood);
+    padding:28px 22px 26px;
+    margin:0 0 20px;
+  }
+  .head{display:flex;align-items:center;gap:13px;margin-bottom:26px}
+  .head .n{
+    flex:0 0 auto;
+    width:30px;height:30px;
+    display:flex;align-items:center;justify-content:center;
+    border:2px solid var(--jade);
+    border-radius:50%;
+    font-family:'Archivo',sans-serif;
+    font-size:12px;font-weight:700;
+    color:var(--jade);
+  }
+  .head h2{
+    font-family:'Archivo',sans-serif;
+    font-weight:600;font-size:23px;
+    line-height:1.25;margin:0;
+    color:var(--charcoal);
+  }
+
+  fieldset{border:0;margin:0 0 26px;padding:0}
+  fieldset:last-of-type{margin-bottom:0}
+  legend{
+    font-family:'Archivo',sans-serif;
+    font-size:11px;font-weight:700;
+    letter-spacing:.2em;text-transform:uppercase;
+    color:var(--jade);
+    padding:0 0 12px;
+  }
+
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opts.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media (max-width:520px){.opts.two{grid-template-columns:1fr}}
+
+  .opt{
+    display:flex;align-items:flex-start;gap:13px;
+    min-height:48px;padding:11px 14px;
+    background:#fff;
+    border:1px solid var(--line);
+    cursor:pointer;line-height:1.55;
+    transition:border-color .15s ease;
+  }
+  .opt:hover{border-color:var(--jade)}
+  .opt input{
+    appearance:none;-webkit-appearance:none;
+    flex:0 0 auto;width:17px;height:17px;margin:5px 0 0;
+    border:1px solid #BEB19A;background:#fff;cursor:pointer;
+  }
+  .opt input[type=radio]{border-radius:50%}
+  .opt input:checked{background:var(--oxblood);border-color:var(--oxblood);box-shadow:inset 0 0 0 3px #fff}
+  .opt input:focus-visible{outline:2px solid var(--navy);outline-offset:3px}
+  .opt:has(input:checked){border-color:var(--oxblood);background:#FDF7F0}
+  .opt .sub{display:block;font-size:12.5px;color:var(--ink-2);margin-top:1px}
+
+  textarea{
+    width:100%;font-family:inherit;font-size:16px;
+    color:var(--ink);padding:13px;
+    background:#fff;border:1px solid var(--line);
+    min-height:88px;resize:vertical;
+  }
+  textarea:focus{outline:2px solid var(--jade);outline-offset:2px}
+  textarea::placeholder{color:#A5988A}
+
+  /* ---------- guest card ---------- */
+  .slip{
+    margin-top:34px;
+    border:1px solid var(--line);
+    background:#FBF6EC;
+  }
+  .slip .inner{padding:26px 22px 24px}
+  .slip .cap{
+    text-align:center;padding-bottom:16px;margin-bottom:18px;
+    border-bottom:1px solid var(--line);
+  }
+  .slip .cap b{
+    display:block;
+    font-family:'Archivo',sans-serif;
+    font-weight:700;font-size:14px;
+    letter-spacing:.28em;text-indent:.28em;
+    text-transform:uppercase;
+    color:var(--oxblood);
+  }
+  pre#slip{
+    font-family:inherit;font-size:14px;line-height:1.9;
+    white-space:pre-wrap;word-wrap:break-word;margin:0;
+  }
+  .empty{color:var(--ink-2)}
+
+  .acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .btn{
+    flex:1 1 160px;
+    display:inline-flex;align-items:center;justify-content:center;
+    min-height:52px;padding:14px 16px;
+    font-family:'Archivo',sans-serif;
+    font-weight:700;font-size:12px;
+    letter-spacing:.2em;text-indent:.2em;
+    text-transform:uppercase;
+    text-decoration:none;border:0;cursor:pointer;
+  }
+  .btn-1{background:var(--oxblood);color:#FBF6EC}
+  .btn-1:hover{background:var(--oxblood-d)}
+  .btn-2{background:transparent;color:var(--navy);border:1px solid var(--navy)}
+  .btn:focus-visible{outline:3px solid var(--mustard);outline-offset:2px}
+
+  .note{text-align:center;font-size:12.5px;color:var(--ink-2);margin:16px 0 0}
+  footer{
+    margin-top:48px;text-align:center;
+    font-family:'Archivo',sans-serif;
+    font-size:10.5px;font-weight:600;
+    letter-spacing:.36em;text-indent:.36em;
+    text-transform:uppercase;color:var(--ink-2);
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important}
+    .cover.open{display:none}
+  }
+</style>
+</head>
+<body class="shut">
+
+<button class="cover" id="cover" aria-label="Open">
+  <span class="leaf l"><span class="pull"></span></span>
+  <span class="leaf r"><span class="pull"></span></span>
+  <span class="mark">Casa Xuan</span>
+  <span class="lab">Open</span>
+</button>
+<noscript><style>.cover{display:none}body{overflow:auto}</style></noscript>
+
+<header class="hero">
+  <div class="roundel"><span class="bar"></span><span class="ring"></span></div>
+  <h1>Welcome Papa Boh<br>&amp; Momma Boh</h1>
+  <div class="rules"></div>
+  <p class="over">Casa Xuan · Elephant &amp; Castle</p>
+</header>
+<div class="tiles"></div>
+
+<main class="sheet">
+
+  <section class="card">
+    <div class="head"><span class="n">I</span><h2>How you sleep</h2></div>
+
+    <fieldset>
+      <legend>This one is</legend>
+      <div class="opts two">
+        <label class="opt"><input type="radio" name="who" value="Papa Boh"><span>Papa Boh</span></label>
+        <label class="opt"><input type="radio" name="who" value="Momma Boh"><span>Momma Boh</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Your pillow</legend>
+      <div class="opts two">
+        <label class="opt"><input type="radio" name="pillow" value="Soft"><span>Soft</span></label>
+        <label class="opt"><input type="radio" name="pillow" value="Medium"><span>Medium</span></label>
+        <label class="opt"><input type="radio" name="pillow" value="Firm"><span>Firm</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Nice to have</legend>
+      <div class="opts two">
+        <label class="opt"><input type="checkbox" name="extras" value="Extra blanket"><span>Extra blanket</span></label>
+        <label class="opt"><input type="checkbox" name="extras" value="Bedside lamp"><span>Bedside lamp</span></label>
+        <label class="opt"><input type="checkbox" name="extras" value="Water by the bed"><span>Water by the bed</span></label>
+        <label class="opt"><input type="checkbox" name="extras" value="Slippers"><span>Slippers</span></label>
+        <label class="opt"><input type="checkbox" name="extras" value="Eye mask"><span>Eye mask</span></label>
+        <label class="opt"><input type="checkbox" name="extras" value="Ear plugs"><span>Ear plugs</span></label>
+      </div>
+    </fieldset>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="n">II</span><h2>Days in London</h2></div>
+    <fieldset>
+      <legend>Your kind of day</legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="pace" value="Gentle"><span>Gentle<span class="sub">Short strolls, somewhere to sit often</span></span></label>
+        <label class="opt"><input type="radio" name="pace" value="Moderate"><span>Moderate<span class="sub">A couple of miles, with proper breaks</span></span></label>
+        <label class="opt"><input type="radio" name="pace" value="Full steam"><span>Full steam<span class="sub">Walk all day; I'll say when I'm tired</span></span></label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Yes to</legend>
+      <div class="opts">
+        <label class="opt"><input type="checkbox" name="london" value="Museums and galleries"><span>Museums &amp; galleries</span></label>
+        <label class="opt"><input type="checkbox" name="london" value="Gardens and parks"><span>Gardens &amp; parks<span class="sub">Kew, Hampstead Heath</span></span></label>
+        <label class="opt"><input type="checkbox" name="london" value="Markets"><span>Markets<span class="sub">Borough Market is two stops away</span></span></label>
+        <label class="opt"><input type="checkbox" name="london" value="A West End show"><span>A West End show</span></label>
+        <label class="opt"><input type="checkbox" name="london" value="Afternoon tea"><span>Afternoon tea</span></label>
+        <label class="opt"><input type="checkbox" name="london" value="A boat down the Thames"><span>A boat down the Thames<span class="sub">Sitting the whole way</span></span></label>
+        <label class="opt"><input type="checkbox" name="london" value="Palaces and historic houses"><span>Palaces &amp; historic houses</span></label>
+        <label class="opt"><input type="checkbox" name="london" value="Chinatown and proper Chinese food"><span>Chinatown &amp; proper Chinese food</span></label>
+        <label class="opt"><input type="checkbox" name="london" value="Shopping"><span>Shopping</span></label>
+        <label class="opt"><input type="checkbox" name="london" value="Days with nothing planned"><span>Days with nothing planned</span></label>
+      </div>
+    </fieldset>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="n">III</span><h2>Going further</h2></div>
+    <fieldset>
+      <legend>Tempting</legend>
+      <div class="opts">
+        <label class="opt"><input type="checkbox" name="trips" value="Lake District"><span>Lake District<span class="sub">Train ~3 hrs, then a hire car · 2–3 nights</span></span></label>
+        <label class="opt"><input type="checkbox" name="trips" value="Amsterdam"><span>Amsterdam<span class="sub">Eurostar ~4 hrs, no airport · 2 nights</span></span></label>
+        <label class="opt"><input type="checkbox" name="trips" value="Paris"><span>Paris<span class="sub">Eurostar 2 hrs 20 · 2 nights</span></span></label>
+        <label class="opt"><input type="checkbox" name="trips" value="The Cotswolds"><span>The Cotswolds<span class="sub">Hire car ~2 hrs · 2 nights</span></span></label>
+        <label class="opt"><input type="checkbox" name="trips" value="Bath and Stonehenge"><span>Bath &amp; Stonehenge<span class="sub">Train 1 hr 30 · 1–2 nights</span></span></label>
+        <label class="opt"><input type="checkbox" name="trips" value="Oxford or Cambridge"><span>Oxford or Cambridge<span class="sub">1 hr · day trip</span></span></label>
+        <label class="opt"><input type="checkbox" name="trips" value="Edinburgh"><span>Edinburgh<span class="sub">Train 4 hrs 30 or a short flight · 2–3 nights</span></span></label>
+        <label class="opt"><input type="checkbox" name="trips" value="None — happy to stay in London"><span>None of it<span class="sub">Happy staying in London</span></span></label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Time away</legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="nights" value="Day trips only"><span>Day trips only</span></label>
+        <label class="opt"><input type="radio" name="nights" value="One trip, 2–3 nights"><span>One trip, 2–3 nights</span></label>
+        <label class="opt"><input type="radio" name="nights" value="Two trips away"><span>Two trips away</span></label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Anything else</legend>
+      <textarea name="other" placeholder="Food you love, food to avoid, requests, complaints, demands"></textarea>
+    </fieldset>
+  </section>
+
+  <div class="slip">
+    <div class="tiles"></div>
+    <div class="inner">
+      <div class="cap"><b>Guest Card</b></div>
+      <pre id="slip"><span class="empty">Your answers appear here. When you're done, press Copy and send it to Xuan.</span></pre>
+      <div class="acts">
+        <button class="btn btn-1" id="copy" type="button">Copy</button>
+        <a class="btn btn-2" id="send" href="#" target="_blank" rel="noopener">Send</a>
+      </div>
+    </div>
+  </div>
+  <p class="note" id="note">Nothing sends automatically — you choose when.</p>
+
+  <footer>At your service</footer>
+</main>
+
+<script>
+(function(){
+  var cover = document.getElementById('cover');
+  cover.addEventListener('click', function(){
+    cover.classList.add('open');
+    document.body.classList.remove('shut');
+    setTimeout(function(){ cover.style.display = 'none'; }, 1900);
+  });
+
+  var ORDER = [
+    ["pillow","Pillow"],
+    ["extras","Nice to have"],
+    ["pace","Pace"],
+    ["london","London"],
+    ["trips","Excursions"],
+    ["nights","Time away"],
+    ["other","Anything else"]
+  ];
+  var out = document.getElementById('slip');
+  var note = document.getElementById('note');
+  var send = document.getElementById('send');
+
+  function valueFor(name){
+    var nodes = document.querySelectorAll('[name="'+name+'"]');
+    if(!nodes.length) return "";
+    var t = nodes[0].type;
+    if(t === 'radio' || t === 'checkbox'){
+      var picked = [];
+      for(var i=0;i<nodes.length;i++){ if(nodes[i].checked) picked.push(nodes[i].value); }
+      return picked.join(', ');
+    }
+    return nodes[0].value.trim();
+  }
+
+  function build(){
+    var lines = [];
+    for(var i=0;i<ORDER.length;i++){
+      var v = valueFor(ORDER[i][0]);
+      if(v) lines.push(ORDER[i][1] + ': ' + v);
+    }
+    if(!lines.length) return "";
+    var who = valueFor('who');
+    return "CASA XUAN \u2014 GUEST CARD\n" + (who || "Name not given") + "\n\n" + lines.join('\n');
+  }
+
+  function render(){
+    var text = build();
+    if(!text){
+      out.innerHTML = '<span class="empty">Your answers appear here. When you\u2019re done, press Copy and send it to Xuan.</span>';
+      send.setAttribute('href','#');
+      return;
+    }
+    out.textContent = text;
+    send.setAttribute('href','https://wa.me/?text=' + encodeURIComponent(text));
+  }
+
+  document.addEventListener('input', render);
+  document.addEventListener('change', render);
+
+  document.getElementById('copy').addEventListener('click', function(){
+    var text = build();
+    if(!text){ note.textContent = 'Nothing to copy yet — answer something first.'; return; }
+    var ok = function(){ note.textContent = 'Copied. Paste it into a message to Xuan.'; };
+    var fb = function(){
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); ok(); }
+      catch(e){ note.textContent = 'Copy blocked here — screenshot the card above instead.'; }
+      document.body.removeChild(ta);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(ok, fb);
+    } else { fb(); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
